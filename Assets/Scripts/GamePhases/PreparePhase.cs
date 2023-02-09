@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -30,20 +28,21 @@ public class PreparePhase : MonoBehaviour
     {
         _choosePanel.OnChoosed += () => _hasChosen = true;
 
-        _choosePanel.AttackChoose.Refresh();
-        _choosePanel.DefenceChoose.Refresh();
-        _choosePanel.Refresh(playerOneName, _firstPerson);
-        await GiveTimeToChoose();
+        await RefreshAndGiveTime(playerOneName, _firstPerson);
         _playerOne = new Fighter(_choosePanel.AttackChoose.BodySpots, _choosePanel.DefenceChoose.BodySpots, firstHp);
 
-        _choosePanel.AttackChoose.Refresh();
-        _choosePanel.DefenceChoose.Refresh();
-        _choosePanel.Refresh(playerTwoName, _secondPerson);
-        await GiveTimeToChoose();
+        await RefreshAndGiveTime(playerTwoName, _secondPerson);
         _playerTwo = new Fighter(_choosePanel.AttackChoose.BodySpots, _choosePanel.DefenceChoose.BodySpots, secondHP);
 
-
         OnPhaseFinished?.Invoke(_playerOne, _playerTwo);
+    }
+
+    private async Task RefreshAndGiveTime(string headerText, Sprite person)
+    {
+        _choosePanel.AttackChoose.Refresh();
+        _choosePanel.DefenceChoose.Refresh();
+        _choosePanel.Refresh(headerText, person);
+        await GiveTimeToChoose();
     }
 
     private async Task GiveTimeToChoose()
